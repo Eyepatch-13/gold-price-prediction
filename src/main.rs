@@ -11,7 +11,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .finish()?;
 
     // Select relevant features
-    let features = df.select(["Volume", "Open", "Low"]).unwrap();
+    let features = df.select(["Volume", "Open", "Low", "High"]).unwrap();
 
     // Extract the target variable
     let target = df.select(["Close"]).unwrap();
@@ -39,10 +39,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mae = mean_absolute_error(&test_target, &predictions);
     let r2 = r2_score(&test_target, &predictions);
 
-    println!("Mean Squared Error: {}", mse); // 53.72786551094094
-    println!("Root Mean Squared Error: {}", rmse); // 7.3299294342402055
-    println!("Mean Absolute Error: {}", mae); // 4.509939421094381
-    println!("R-squared (R2) Score: {}", r2); // 0.991268150675273
+    println!("Mean Squared Error: {}", mse); // 20.00765465999868
+    println!("Root Mean Squared Error: {}", rmse); // 4.472991690132979
+    println!("Mean Absolute Error: {}", mae); // 3.3355890412224705
+    println!("R-squared (R2) Score: {}", r2); // 0.9967483572226277
 
     Ok(())
 }
