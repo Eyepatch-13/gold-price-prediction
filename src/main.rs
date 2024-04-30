@@ -14,12 +14,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let features = df.select(["Volume", "Open", "Low"]).unwrap();
 
     // Extract the target variable
-    let target = df.select(["Close"]).unwrap(); // Assuming "Date" is the target variable
+    let target = df.select(["Close"]).unwrap();
 
     // Split the data into features and target
     let features: ndarray::Array2<f64> = features.to_ndarray::<Float64Type>(IndexOrder::C)?;
     let target: ndarray::Array1<f64> = target.to_ndarray::<Float64Type>(IndexOrder::C)?.to_owned().into_shape(target.height()).unwrap();
-    //let target: ndarray::Array2<f64> = target.to_ndarray::<Float64Type>(IndexOrder::C)?;
 
     // Split the data into training and testing sets
     let (train_features, test_features) = features.view().split_at(Axis(0),  (0.8 * features.nrows() as f64) as usize);
@@ -29,7 +28,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let (train_target, test_target) = (train_target.to_owned(), test_target.to_owned());
 
     let train_dataset = Dataset::new(train_features.clone(), train_target.clone());
-    let test_dataset = Dataset::new(test_features.clone(), test_target.clone());
+    let _test_dataset = Dataset::new(test_features.clone(), test_target.clone());
 
     let model = LinearRegression::default().fit(&train_dataset)?; 
     let predictions = model.predict(&test_features);
@@ -40,10 +39,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mae = mean_absolute_error(&test_target, &predictions);
     let r2 = r2_score(&test_target, &predictions);
 
-    println!("Mean Squared Error: {}", mse);
-    println!("Root Mean Squared Error: {}", rmse);
-    println!("Mean Absolute Error: {}", mae);
-    println!("R-squared (R2) Score: {}", r2);
+    println!("Mean Squared Error: {}", mse); // 53.72786551094094
+    println!("Root Mean Squared Error: {}", rmse); // 7.3299294342402055
+    println!("Mean Absolute Error: {}", mae); // 4.509939421094381
+    println!("R-squared (R2) Score: {}", r2); // 0.991268150675273
 
     Ok(())
 }
